@@ -9,9 +9,15 @@ router.post(
   ClientAgentController.addClientAgent
 );
 router.get(
-  "/getAllClientAgent",
+  "/getAllClients",
   tokenValidator,
-  ClientAgentController.getAllClientAgent
+  ClientAgentController.getAllClients
+);
+
+router.get(
+  "/getAllAgents",
+  tokenValidator,
+  ClientAgentController.getAllAgents
 );
 router.put(
   "/updateClientAgent/:id",

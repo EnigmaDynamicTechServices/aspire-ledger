@@ -83,10 +83,18 @@ const addClientAgent = async (req, res) => {
   }
 };
 
-const getAllClientAgent = async (req, res) => {
+const getAllClients = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
-    const clientAgents = await ClientAgentModel.find()
+    const clientAgents = await ClientAgentModel.find({
+      companyName: {
+        $or: [
+          { companyName: null },
+          { companyName: "" },
+          { companyName: { $exists: false } }
+        ]
+      }
+    })
       .populate({
         path: 'country',
         select: '_id, name'
@@ -102,8 +110,49 @@ const getAllClientAgent = async (req, res) => {
 
     return res.status(200).json({
       message: clientAgents.length
-        ? "Client/Agent listed successfully"
-        : "No client/agent found!",
+        ? "Clients listed successfully"
+        : "No client found!",
+      data: clientAgents,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(totalClientAgents / limit),
+        totalItems: totalClientAgents,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "An internal server error occurred.",
+    });
+  }
+};
+
+
+const getAllAgents = async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const clientAgents = await ClientAgentModel.find({
+      companyName: {
+        companyName: { $nin: [null, ""] },
+        companyName: { $exists: true }
+      }
+    })
+      .populate({
+        path: 'country',
+        select: '_id, name'
+      })
+      .populate({
+        path: 'city',
+        select: '_id, name'
+      })
+      .skip((page - 1) * limit)
+      .limit(parseInt(limit))
+      .lean();
+    const totalClientAgents = await ClientAgentModel.countDocuments();
+
+    return res.status(200).json({
+      message: clientAgents.length
+        ? "Agents listed successfully"
+        : "No agent found!",
       data: clientAgents,
       pagination: {
         currentPage: parseInt(page),
