@@ -87,13 +87,11 @@ const getAllClients = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
     const clientAgents = await ClientAgentModel.find({
-      companyName: {
-        $or: [
-          { companyName: null },
-          { companyName: "" },
-          { companyName: { $exists: false } }
-        ]
-      }
+      $or: [
+        { companyName: null }, 
+        { companyName: "" }, 
+        { companyName: { $exists: false } }
+      ]
     })
       .populate({
         path: 'country',
@@ -120,6 +118,7 @@ const getAllClients = async (req, res) => {
       },
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       message: "An internal server error occurred.",
     });
@@ -131,10 +130,12 @@ const getAllAgents = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
     const clientAgents = await ClientAgentModel.find({
-      companyName: {
-        companyName: { $nin: [null, ""] },
-        companyName: { $exists: true }
-      }
+
+      $and: [
+        { companyName: { $exists: true } },
+        { companyName: { $nin: [null, ""] } }
+      ]
+
     })
       .populate({
         path: 'country',
@@ -161,6 +162,7 @@ const getAllAgents = async (req, res) => {
       },
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       message: "An internal server error occurred.",
     });
