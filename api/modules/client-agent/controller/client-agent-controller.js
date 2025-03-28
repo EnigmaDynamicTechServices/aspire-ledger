@@ -249,6 +249,7 @@ const updateClientAgent = async (req, res) => {
 
 export default {
   addClientAgent,
-  getAllClientAgent,
+  getAllClients,
+  getAllAgents,
   updateClientAgent,
 };
