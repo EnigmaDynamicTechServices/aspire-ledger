@@ -83,15 +83,10 @@ const addClientAgent = async (req, res) => {
   }
 };
 
-const getAllClients = async (req, res) => {
+const getAllClientAgent = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
     const clientAgents = await ClientAgentModel.find({
-      $or: [
-        { companyName: null }, 
-        { companyName: "" }, 
-        { companyName: { $exists: false } }
-      ]
     })
       .populate({
         path: 'country',
@@ -108,8 +103,8 @@ const getAllClients = async (req, res) => {
 
     return res.status(200).json({
       message: clientAgents.length
-        ? "Clients listed successfully"
-        : "No client found!",
+        ? "Client/Agent listed successfully"
+        : "No data found!",
       data: clientAgents,
       pagination: {
         currentPage: parseInt(page),
@@ -125,49 +120,6 @@ const getAllClients = async (req, res) => {
   }
 };
 
-
-const getAllAgents = async (req, res) => {
-  try {
-    const { page = 1, limit = 10 } = req.query;
-    const clientAgents = await ClientAgentModel.find({
-
-      $and: [
-        { companyName: { $exists: true } },
-        { companyName: { $nin: [null, ""] } }
-      ]
-
-    })
-      .populate({
-        path: 'country',
-        select: '_id, name'
-      })
-      .populate({
-        path: 'city',
-        select: '_id, name'
-      })
-      .skip((page - 1) * limit)
-      .limit(parseInt(limit))
-      .lean();
-    const totalClientAgents = await ClientAgentModel.countDocuments();
-
-    return res.status(200).json({
-      message: clientAgents.length
-        ? "Agents listed successfully"
-        : "No agent found!",
-      data: clientAgents,
-      pagination: {
-        currentPage: parseInt(page),
-        totalPages: Math.ceil(totalClientAgents / limit),
-        totalItems: totalClientAgents,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      message: "An internal server error occurred.",
-    });
-  }
-};
 
 const updateClientAgent = async (req, res) => {
   try {
@@ -251,7 +203,6 @@ const updateClientAgent = async (req, res) => {
 
 export default {
   addClientAgent,
-  getAllClients,
-  getAllAgents,
+  getAllClientAgent,
   updateClientAgent,
 };
