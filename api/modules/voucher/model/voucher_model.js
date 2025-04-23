@@ -7,10 +7,13 @@ const voucherSchema = new Schema(
         hotel: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "HotelModel" },
         checkInDate: { type: Date, default: Date.now },
         checkOutDate: { type: Date, default: Date.now },
-        roomType: { type: String, required: true },
-        doubleRooms: { type: Number, required: true },
-        singleRooms: { type: Number, default: 0 },
-        extraBed: { type: Number, default: 0 },
+        roomDetails: [
+            {
+                roomType: { type: String, required: true },
+                noOfRooms: { type: Number, required: true },
+                extraBed: { type: Number, default: 0 },
+            }
+        ],
         mealPlan: { type: Number, required: true },
         inclusions: { type: Array, required: true },
     },

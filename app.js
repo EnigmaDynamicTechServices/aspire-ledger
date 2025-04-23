@@ -15,6 +15,7 @@ import clientAgentRoute from "./api/modules/client-agent/route/client-agent-rout
 import queryRoute from "./api/modules/query/route/query-route.js";
 import vehicleRoute from "./api/modules/vehicle/route/vehicle-route.js";
 import invoiceRoute from "./api/modules/invoice/route/invoice-route.js";
+import voucherRoute from "./api/modules/voucher/route/voucher_route.js";
 import paymentDetailsRoute from "./api/modules/payment-details/route/payment-details-route.js";
 import bcrypt from "bcrypt";
 import compression from "compression";
@@ -190,7 +191,7 @@ app.use("/api", vehicleRoute);
 app.use("/api", clientAgentRoute);
 app.use("/api", queryRoute);
 app.use("/api", invoiceRoute);
-app.use("/api", invoiceRoute);
+app.use("/api", voucherRoute);
 app.use("/api", paymentDetailsRoute);
 
 export default app;
