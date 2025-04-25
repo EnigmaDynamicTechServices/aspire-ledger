@@ -79,9 +79,9 @@ const addPaymentDetails = async (req, res) => {
 const getAllPaymentDetails = async (req, res) => {
     try {
         const { page = 1, limit = 50 } = req.query;
-         
 
-         if (!ObjectId.isValid(req.params.id)) {    
+
+        if (!ObjectId.isValid(req.params.id)) {
             return res.status(400).json({
                 message: "Invalid Invoice Id!",
             });

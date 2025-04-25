@@ -27,7 +27,12 @@ export const createVoucher = async (req, res) => {
         }
 
         // Check for existing voucher
-        const existingVoucher = await VoucherModel.findOne({ query }).select('_id').lean();
+        const existingVoucher = await VoucherModel.findOne({
+            query,
+            hotel,
+            checkInDate,
+            checkOutDate,
+        }).select('_id').lean();
 
         if (existingVoucher) {
             return res.status(409).json({ message: "Voucher Already Exists" });
@@ -59,18 +64,25 @@ export const createVoucher = async (req, res) => {
 const getAllVoucher = async (req, res) => {
     try {
         const { page = 1, limit = 50 } = req.query;
-        const vouchers = await VoucherModel.find()
-        .populate({
-            path: "query",
-            select: "_id clientAgent adult child",
-            populate: {
-                path: "clientAgent",
-                select: "_id honorifics firstName lastName",
-            },
-        }).populate({
-            path: "hotel",
-            select: "_id name address",
-        })
+
+        if (!ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({
+                message: "Invalid Query Id!",
+            });
+        }
+
+        const vouchers = await VoucherModel.find({query: req.params.id})
+            .populate({
+                path: "query",
+                select: "_id clientAgent adult child",
+                populate: {
+                    path: "clientAgent",
+                    select: "_id honorifics firstName lastName",
+                },
+            }).populate({
+                path: "hotel",
+                select: "_id name address",
+            })
             .skip((page - 1) * limit)
             .limit(parseInt(limit))
             .lean();

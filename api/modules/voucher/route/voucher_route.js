@@ -5,7 +5,7 @@ import VoucherController from "../controller/voucher_controller.js";
 
 router.post("/createVoucher", tokenValidator, VoucherController.createVoucher);
 router.get(
-    "/getAllVoucher",
+    "/getAllVoucher/:id",
     tokenValidator,
     VoucherController.getAllVoucher
 );
