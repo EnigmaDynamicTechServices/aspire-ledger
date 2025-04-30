@@ -1,6 +1,7 @@
 import VoucherModel from "../model/voucher_model.js";
 import mongoose from "mongoose";
 const { ObjectId } = mongoose.Types;
+import CustomStrings from "../../../common/custom_strings.js";
 
 
 export const createVoucher = async (req, res) => {
@@ -106,7 +107,33 @@ const getAllVoucher = async (req, res) => {
     }
 };
 
+
+const deleteVoucher = async (req, res) => {
+    try {
+        const voucherId = req.params.id;
+        if (!ObjectId.isValid(voucherId)) {
+            return res.status(CustomStrings.STATUS_CODE_404).json({
+                message: CustomStrings.INVALID_REQUEST_PARAMS
+            });
+        }
+        const voucher = await VoucherModel.findByIdAndDelete(voucherId);
+        if (!voucher) {
+            return res.status(CustomStrings.STATUS_CODE_404).json({
+                message: CustomStrings.VOUCHER_DOES_NOT_EXISTS,
+            });
+        }
+        return res.json({
+            message: CustomStrings.VOUCHER_DELETED_SUCCESSFULLY,
+        });
+    } catch (e) {
+        return res.status(CustomStrings.STATUS_CODE_500).json({
+            message: CustomStrings.SOMETHING_WENT_WRONG
+        });
+    }
+}
+
 export default {
     createVoucher,
     getAllVoucher,
+    deleteVoucher,
 };

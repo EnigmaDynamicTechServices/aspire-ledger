@@ -1,14 +1,17 @@
 const CustomStrings = {
   INVALID_REQUEST_BODY: "Invalid Request Body!",
+  INVALID_REQUEST_PARAMS: "Oops! Invalid Request Params",
   SOMETHING_WENT_WRONG: "Oops! Something Went Wrong",
   CONNECTION_ERROR: "Connection Error!",
   CONNECTED_TO_MONGODB: "Connected to MongoDB!",
 
   //Status Codes
-  STATUS_CODE_400: 400,
-  STATUS_CODE_404: 404,
   STATUS_CODE_500: 500,
+  STATUS_CODE_400: 400,
   STATUS_CODE_401: 401,
+  STATUS_CODE_403: 403,
+  STATUS_CODE_404: 404,
+  STATUS_CODE_409: 409,
 
   //Role Controller
   ROLE_CREATED_SUCCESSFULLY: "Role Created Successfully!",
@@ -34,6 +37,16 @@ const CustomStrings = {
   SUPER_ADMIN_CREATED_SUCCESSFULLY: "Super Admin user created successfully.",
   SUPER_ADMIN_ALREADY_EXISTS: "Super Admin user already exists.",
   ERROR_INITIALIZING_SUPER_ADMIN: "Error initializing Super Admin",
+
+
+  ///Booking Controller Strings
+  NO_VOUCHER_FOUND: "Oops! No voucher found",
+  ERROR_DELETING_VOUCHER: "Oops! Error deleting voucher",
+  ERROR_FETCHING_VOUCHER: "Oops! Error fetching voucher",
+  VOUCHER_DOES_NOT_EXISTS: "Oops! voucher does not exists",
+  VOUCHER_DELETED_SUCCESSFULLY: "Great! Voucher deleted successfully",
 };
+
+
 
 export default CustomStrings;

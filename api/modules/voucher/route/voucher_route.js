@@ -9,5 +9,7 @@ router.get(
     tokenValidator,
     VoucherController.getAllVoucher
 );
+router.delete('/deleteVoucher/:id', tokenValidator, VoucherController.deleteVoucher);
+
 
 export default router;
