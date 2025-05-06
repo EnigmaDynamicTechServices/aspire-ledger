@@ -10,5 +10,10 @@ router.get(
     tokenValidator,
     QueryController.getAllQuery
 );
+router.put(
+    "/updateQuery/:id",
+    tokenValidator,
+    QueryController.updateQuery
+);
 
 export default router;

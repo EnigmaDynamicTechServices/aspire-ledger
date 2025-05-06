@@ -72,7 +72,7 @@ const getAllVoucher = async (req, res) => {
             });
         }
 
-        const vouchers = await VoucherModel.find({query: req.params.id})
+        const vouchers = await VoucherModel.find({ query: req.params.id })
             .populate({
                 path: "query",
                 select: "_id clientAgent adult child",
@@ -107,6 +107,56 @@ const getAllVoucher = async (req, res) => {
     }
 };
 
+const updateVoucher = async () => {
+    try {
+        const voucherId = req.params.id;
+        if (!ObjectId.isValid(voucherId)) {
+            return res.status(CustomStrings.STATUS_CODE_404).json({
+                message: CustomStrings.INVALID_REQUEST_PARAMS
+            });
+        }
+        if (Object.keys(req.body).length === 0) {
+            return res.status(CustomStrings.STATUS_CODE_400).json({
+                message: CustomStrings.INVALID_REQUEST_BODY
+            });
+        }
+        const {
+            query,
+            hotel,
+            checkInDate,
+            checkOutDate,
+            roomDetails,
+            mealPlan,
+            inclusions,
+        } = req.body;
+        const voucher = await VoucherModel.findById(voucherId);
+        if (!voucher) {
+            return res.status(CustomStrings.STATUS_CODE_404).json({
+                message: CustomStrings.VOUCHER_DOES_NOT_EXISTS,
+            });
+        }
+        await VoucherModel.findByIdAndUpdate(
+            voucherId,
+            {
+                query: query,
+                hotel: hotel,
+                checkInDate: checkInDate,
+                checkOutDate: checkOutDate,
+                roomDetails: roomDetails,
+                mealPlan: mealPlan,
+                inclusions: inclusions,
+            },
+        );
+        return res.json({
+            message: CustomStrings.VOUCHER_UPDATED_SUCCESSFULLY,
+        });
+    } catch (e) {
+        return res.status(CustomStrings.STATUS_CODE_500).json({
+            message: CustomStrings.SOMETHING_WENT_WRONG
+        });
+    }
+}
+
 
 const deleteVoucher = async (req, res) => {
     try {
@@ -135,5 +185,6 @@ const deleteVoucher = async (req, res) => {
 export default {
     createVoucher,
     getAllVoucher,
+    updateVoucher,
     deleteVoucher,
 };

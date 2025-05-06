@@ -1,6 +1,8 @@
 import ClientAgentModel from "../model/client-agent-model.js";
+import QueryModel from "../../query/model/query-model.js";
 import mongoose from "mongoose";
 const { ObjectId } = mongoose.Types;
+import CustomStrings from "../../../common/custom_strings.js";
 
 const addClientAgent = async (req, res) => {
   try {
@@ -201,8 +203,55 @@ const updateClientAgent = async (req, res) => {
   }
 };
 
+const deleteClientAgent = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Validate ID
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({
+        message: "Invalid Request Parameter",
+      });
+    }
+
+    // Check if the clientAgent ID is referenced in Query model
+    const queryExists = await QueryModel.exists({ clientAgentId: id });
+
+    let result;
+
+    if (queryExists) {
+      // Soft delete
+      result = await ClientAgentModel.findByIdAndUpdate(
+        id,
+        { status: false },
+        { new: true }
+      );
+    } else {
+      // Hard delete
+      result = await ClientAgentModel.findByIdAndDelete(id);
+    }
+
+    if (!result) {
+      return res.status(CustomStrings.STATUS_CODE_404).json({
+        message: CustomStrings.CLIENT_AGENT_DOES_NOT_EXISTS,
+      });
+    }
+
+    return res.json({
+      message: CustomStrings.CLIENT_AGENT_DELETED_SUCCESSFULLY,
+    });
+  } catch (e) {
+    console.error("Error deleting client agent:", e); // Optional: log for debugging
+    return res.status(500).json({
+      message: CustomStrings.SOMETHING_WENT_WRONG,
+    });
+  }
+};
+
+
 export default {
   addClientAgent,
   getAllClientAgent,
   updateClientAgent,
+  deleteClientAgent
 };

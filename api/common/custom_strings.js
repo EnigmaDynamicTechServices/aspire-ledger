@@ -39,12 +39,30 @@ const CustomStrings = {
   ERROR_INITIALIZING_SUPER_ADMIN: "Error initializing Super Admin",
 
 
-  ///Booking Controller Strings
+  ///Voucher Controller Strings
   NO_VOUCHER_FOUND: "Oops! No voucher found",
   ERROR_DELETING_VOUCHER: "Oops! Error deleting voucher",
   ERROR_FETCHING_VOUCHER: "Oops! Error fetching voucher",
   VOUCHER_DOES_NOT_EXISTS: "Oops! voucher does not exists",
   VOUCHER_DELETED_SUCCESSFULLY: "Great! Voucher deleted successfully",
+  VOUCHER_UPDATED_SUCCESSFULLY: "Great! Voucher Updated Successfully!",
+
+  ///Query Controller Strings
+  NO_QUERY_FOUND: "Oops! No Query found",
+  ERROR_DELETING_QUERY: "Oops! Error deleting query",
+  ERROR_FETCHING_QUERY: "Oops! Error fetching query",
+  QUERY_DOES_NOT_EXISTS: "Oops! query does not exists",
+  QUERY_DELETED_SUCCESSFULLY: "Great! query deleted successfully",
+  QUERY_UPDATED_SUCCESSFULLY: "Great! query Updated Successfully!",
+
+
+  ///Client Agent Controller Strings
+  NO_CLIENT_AGENT_FOUND: "Oops! No Client/Agent found",
+  ERROR_DELETING_CLIENT_AGENT: "Oops! Error deleting client/agent",
+  ERROR_FETCHING_CLIENT_AGENT: "Oops! Error fetching client/agent",
+  CLIENT_AGENT_DOES_NOT_EXISTS: "Oops! client/agent does not exists",
+  CLIENT_AGENT_DELETED_SUCCESSFULLY: "Great! client/agent deleted successfully",
+  CLIENT_AGENT_UPDATED_SUCCESSFULLY: "Great! client/agent Updated Successfully!",
 };
 
 

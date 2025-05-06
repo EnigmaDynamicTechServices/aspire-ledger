@@ -108,38 +108,100 @@ const addQuery = async (req, res) => {
 
 const getAllQuery = async (req, res) => {
   try {
-      const { page = 1, limit = 10 } = req.query;
-      const queries = await QueryModel.find()
-        .populate([
-          { path: "clientAgent", select: "_id honorifics firstName lastName companyName mobile countryCode" },
-          { path: "country", select: "_id name" },
-          { path: "assignTo", select: "_id fullName" },
-        ])
-        .skip((page - 1) * limit)
-        .limit(parseInt(limit))
-        .lean();
-      const totalQueries = await QueryModel.countDocuments();
-  
-      return res.status(200).json({
-        message: queries.length
-          ? "Queries listed successfully"
-          : "No query found!",
-        data: queries,
-        pagination: {
-          currentPage: parseInt(page),
-          totalPages: Math.ceil(totalQueries / limit),
-          totalItems: totalQueries,
-        },
-      });
-    } catch (error) {
-      return res.status(500).json({
-        message: "An internal server error occurred.",
+    const { page = 1, limit = 10 } = req.query;
+    const queries = await QueryModel.find()
+      .populate([
+        { path: "clientAgent", select: "_id honorifics firstName lastName companyName mobile countryCode" },
+        { path: "country", select: "_id name" },
+        { path: "assignTo", select: "_id fullName" },
+      ])
+      .skip((page - 1) * limit)
+      .limit(parseInt(limit))
+      .lean();
+    const totalQueries = await QueryModel.countDocuments();
+
+    return res.status(200).json({
+      message: queries.length
+        ? "Queries listed successfully"
+        : "No query found!",
+      data: queries,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(totalQueries / limit),
+        totalItems: totalQueries,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "An internal server error occurred.",
+    });
+  }
+};
+
+
+const updateQuery = async () => {
+  try {
+    const queryId = req.params.id;
+    if (!ObjectId.isValid(queryId)) {
+      return res.status(CustomStrings.STATUS_CODE_404).json({
+        message: CustomStrings.INVALID_REQUEST_PARAMS
       });
     }
-};
+    if (Object.keys(req.body).length === 0) {
+      return res.status(CustomStrings.STATUS_CODE_400).json({
+        message: CustomStrings.INVALID_REQUEST_BODY
+      });
+    }
+    const {
+      clientAgent,
+      country,
+      startingPoint,
+      endingPoint,
+      travelMonth,
+      fromDate,
+      toDate,
+      adult,
+      child,
+      priority,
+      assignTo,
+      service,
+    } = req.body;
+    const query = await QueryModel.findById(queryId);
+    if (!query) {
+      return res.status(CustomStrings.STATUS_CODE_404).json({
+        message: CustomStrings.QUERY_DOES_NOT_EXISTS,
+      });
+    }
+    await QueryModel.findByIdAndUpdate(
+      queryId,
+      {
+        clientAgent: clientAgent,
+        country: country,
+        startingPoint: startingPoint,
+        endingPoint: endingPoint,
+        travelMonth: travelMonth,
+        fromDate: fromDate,
+        toDate: toDate,
+        adult: adult,
+        child: child,
+        priority: priority,
+        assignTo: assignTo,
+        service: service,
+      },
+    );
+    return res.json({
+      message: CustomStrings.QUERY_UPDATED_SUCCESSFULLY,
+    });
+  } catch (e) {
+    return res.status(CustomStrings.STATUS_CODE_500).json({
+      message: CustomStrings.SOMETHING_WENT_WRONG
+    });
+  }
+}
 
 
 export default {
   addQuery,
   getAllQuery,
+  updateQuery,
 };

@@ -20,4 +20,11 @@ router.put(
   ClientAgentController.updateClientAgent
 );
 
+
+router.delete(
+  "/deleteClientAgent/:id",
+  tokenValidator,
+  ClientAgentController.deleteClientAgent
+);
+
 export default router;
